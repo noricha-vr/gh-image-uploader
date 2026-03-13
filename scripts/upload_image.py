@@ -55,7 +55,6 @@ class Config:
     def __init__(self, args: argparse.Namespace, env: dict[str, str]) -> None:
         self.bucket = args.bucket or env.get("R2_BUCKET", "")
         self.base_url = args.base_url or env.get("R2_PUBLIC_BASE_URL", "")
-        self.account_id = env.get("CLOUDFLARE_ACCOUNT_ID", "")
         self.quality = args.quality or int(env.get("AVIF_QUALITY", "80"))
         self.max_file_bytes = int(env.get("MAX_FILE_BYTES", str(10 * 1024 * 1024)))
         self.max_width = int(env.get("MAX_WIDTH", "0"))  # 0 = no resize
@@ -114,7 +113,6 @@ def upload_to_r2(
     file_path: Path,
     bucket: str,
     key: str,
-    account_id: str | None = None,
 ) -> None:
     """Upload file to R2 using wrangler CLI."""
     cmd = [
@@ -129,8 +127,6 @@ def upload_to_r2(
         "--content-type",
         "image/avif",
     ]
-    if account_id:
-        cmd.extend(["--account-id", account_id])
 
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
@@ -181,7 +177,7 @@ def main() -> None:
         avif_size = avif_path.stat().st_size
 
         key = generate_key(file_path.name, args.repo, args.number)
-        upload_to_r2(avif_path, config.bucket, key, config.account_id)
+        upload_to_r2(avif_path, config.bucket, key)
 
         url = f"{config.base_url.rstrip('/')}/{key}"
 

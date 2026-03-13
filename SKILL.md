@@ -75,7 +75,6 @@ uv run scripts/upload_image.py --format json screenshot.png
 |------|------|-----------|------|
 | `R2_BUCKET` | Yes | - | R2 バケット名 |
 | `R2_PUBLIC_BASE_URL` | Yes | - | R2 公開 URL（例: `https://pub-xxxxx.r2.dev`） |
-| `CLOUDFLARE_ACCOUNT_ID` | No | - | Cloudflare アカウント ID（wrangler login 済みなら不要） |
 | `AVIF_QUALITY` | No | `80` | AVIF 変換品質 |
 | `MAX_FILE_BYTES` | No | `10485760` | 最大ファイルサイズ（バイト） |
 | `MAX_WIDTH` | No | `0`（無制限） | 最大幅（超えたらリサイズ） |
