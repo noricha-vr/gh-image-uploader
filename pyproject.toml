@@ -1,0 +1,9 @@
+[project]
+name = "gh-image-uploader"
+version = "0.1.0"
+description = "Upload images to Cloudflare R2 as AVIF"
+requires-python = ">=3.12"
+dependencies = [
+    "Pillow>=10.0",
+    "pillow-heif>=0.18.0",
+]
