@@ -126,6 +126,7 @@ def upload_to_r2(
         str(file_path),
         "--content-type",
         "image/avif",
+        "--remote",
     ]
 
     result = subprocess.run(cmd, capture_output=True, text=True)
