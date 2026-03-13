@@ -118,7 +118,7 @@ def upload_to_r2(
 ) -> None:
     """Upload file to R2 using wrangler CLI."""
     cmd = [
-        "npx",
+        "bunx",
         "wrangler",
         "r2",
         "object",
