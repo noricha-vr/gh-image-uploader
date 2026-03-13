@@ -1,57 +1,34 @@
 # gh-image-uploader
 
-画像を AVIF に変換して Cloudflare R2 にアップロードし、公開 URL を返す CLI ツール。
+Claude Code 用スキル。エージェントが GitHub issue / PR にスクリーンショットや画像を Markdown で貼り付けるための手順を定義する。
 
-## 前提条件
+スキル定義: [SKILL.md](SKILL.md)
 
-- [uv](https://docs.astral.sh/uv/) がインストール済み
-- [Bun](https://bun.sh/)（`bunx wrangler` 実行用）
+## 仕組み
+
+1. エージェントが SKILL.md の手順に従ってスクリプトを呼び出す
+2. 画像を AVIF に変換して Cloudflare R2 にアップロード
+3. 公開 URL / Markdown リンクを返す
 
 ## セットアップ
 
-### 1. R2 バケット作成
+### 前提条件
 
-Cloudflare ダッシュボードまたは wrangler CLI で R2 バケットを作成する。
+- [uv](https://docs.astral.sh/uv/)
+- [Bun](https://bun.sh/)（`bunx wrangler` 実行用）
 
-```bash
-# wrangler CLI の場合
-bunx wrangler r2 bucket create your-bucket-name
-```
-
-バケットの公開アクセスを有効にし、公開 URL（例: `https://pub-xxxxx.r2.dev`）を控える。
-
-### 2. 環境変数設定
-
-`.env.example` をコピーして値を設定する。
+### 手順
 
 ```bash
+# 1. 環境変数設定
 cp .env.example .env
-```
+# R2_BUCKET と R2_PUBLIC_BASE_URL を設定
 
-最低限 `R2_BUCKET` と `R2_PUBLIC_BASE_URL` を設定する。
-
-```bash
-# .env
-R2_BUCKET=your-bucket-name
-R2_PUBLIC_BASE_URL=https://pub-xxxxx.r2.dev
-```
-
-### 3. wrangler 認証
-
-```bash
+# 2. wrangler 認証
 bunx wrangler login
-```
 
-ブラウザが開くので Cloudflare アカウントで認証する。
-
-## 動作確認
-
-```bash
+# 3. 動作確認
 uv run scripts/upload_image.py --format markdown test-image.png
 ```
 
-成功すると Markdown 形式の画像リンクが出力される:
-
-```
-![test-image](https://pub-xxxxx.r2.dev/uploads/2026/03/abcd1234-test-image.avif)
-```
+R2 バケットは Cloudflare ダッシュボードまたは `bunx wrangler r2 bucket create <name>` で作成し、公開アクセスを有効にする。
